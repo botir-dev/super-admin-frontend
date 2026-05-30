@@ -1,0 +1,10 @@
+node_modules/
+.next/
+out/
+build/
+
+# Muhim: Maxfiy kalitlar saqlanadigan fayllar (bular ham GitHub-ga chiqmasligi shart)
+.env
+.env.local
+.env.production.local
+.env.development.local
