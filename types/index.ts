@@ -41,6 +41,7 @@ export interface Manager {
   branch_id: string;
   restaurant_name?: string;
   branch_name?: string;
+  telegram_chat_id?: string;
   created_at?: string;
 }
 
@@ -52,6 +53,7 @@ export interface Owner {
   is_active: boolean;
   restaurant_id: string;
   restaurant_name?: string;
+  telegram_chat_id?: string;
   created_at?: string;
 }
 

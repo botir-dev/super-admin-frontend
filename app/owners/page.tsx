@@ -39,6 +39,7 @@ function OwnerModal({
     username: owner?.username ?? "",
     phone: owner?.phone ?? "",
     password: "",
+    telegram_chat_id: owner?.telegram_chat_id ?? "",
   });
   const [showPass, setShowPass] = useState(false);
 
@@ -48,6 +49,7 @@ function OwnerModal({
         const data: any = {
           full_name: form.full_name,
           phone: form.phone || undefined,
+          telegram_chat_id: form.telegram_chat_id || undefined,
         };
         return ownerApi.update(owner.id, data);
       }
@@ -57,6 +59,7 @@ function OwnerModal({
         username: form.username,
         phone: form.phone || undefined,
         password: form.password,
+        telegram_chat_id: form.telegram_chat_id || undefined,
       });
     },
     onSuccess: () => {
@@ -75,12 +78,22 @@ function OwnerModal({
     (owner ? true : !!form.username && !!form.password && !!form.restaurant_id);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4"
-      style={{ background: "rgba(0,0,0,0.7)", backdropFilter: "blur(4px)" }}>
-      <div className="w-full max-w-md rounded-2xl p-6 border"
-        style={{ background: "var(--bg-surface)", borderColor: "var(--border)" }}>
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4"
+      style={{ background: "rgba(0,0,0,0.7)", backdropFilter: "blur(4px)" }}
+    >
+      <div
+        className="w-full max-w-md rounded-2xl p-6 border"
+        style={{
+          background: "var(--bg-surface)",
+          borderColor: "var(--border)",
+        }}
+      >
         <div className="flex items-center justify-between mb-5">
-          <h2 className="font-bold text-base" style={{ color: "var(--text-primary)" }}>
+          <h2
+            className="font-bold text-base"
+            style={{ color: "var(--text-primary)" }}
+          >
             {owner ? "Owner tahrirlash" : "Yangi owner"}
           </h2>
           <button onClick={onClose} className="btn-icon">
@@ -92,7 +105,10 @@ function OwnerModal({
           {/* Restoran — faqat yaratishda */}
           {!owner && (
             <div>
-              <label className="block text-xs font-medium mb-1" style={{ color: "var(--text-secondary)" }}>
+              <label
+                className="block text-xs font-medium mb-1"
+                style={{ color: "var(--text-secondary)" }}
+              >
                 Restoran *
               </label>
               <select
@@ -102,11 +118,16 @@ function OwnerModal({
               >
                 <option value="">Tanlang...</option>
                 {restaurants.map((r) => (
-                  <option key={r.id} value={r.id}>{r.name}</option>
+                  <option key={r.id} value={r.id}>
+                    {r.name}
+                  </option>
                 ))}
               </select>
               {form.restaurant_id && (
-                <p className="text-xs mt-1" style={{ color: "var(--text-muted)" }}>
+                <p
+                  className="text-xs mt-1"
+                  style={{ color: "var(--text-muted)" }}
+                >
                   ⚠️ Bir restoranda faqat bitta owner bo'lishi mumkin
                 </p>
               )}
@@ -114,7 +135,10 @@ function OwnerModal({
           )}
 
           <div>
-            <label className="block text-xs font-medium mb-1" style={{ color: "var(--text-secondary)" }}>
+            <label
+              className="block text-xs font-medium mb-1"
+              style={{ color: "var(--text-secondary)" }}
+            >
               To'liq ism *
             </label>
             <input
@@ -127,7 +151,10 @@ function OwnerModal({
 
           {!owner && (
             <div>
-              <label className="block text-xs font-medium mb-1" style={{ color: "var(--text-secondary)" }}>
+              <label
+                className="block text-xs font-medium mb-1"
+                style={{ color: "var(--text-secondary)" }}
+              >
                 Username *
               </label>
               <input
@@ -140,7 +167,10 @@ function OwnerModal({
           )}
 
           <div>
-            <label className="block text-xs font-medium mb-1" style={{ color: "var(--text-secondary)" }}>
+            <label
+              className="block text-xs font-medium mb-1"
+              style={{ color: "var(--text-secondary)" }}
+            >
               Telefon
             </label>
             <input
@@ -151,9 +181,30 @@ function OwnerModal({
             />
           </div>
 
+          <div>
+            <label
+              className="block text-xs font-medium mb-1"
+              style={{ color: "var(--text-secondary)" }}
+            >
+              Telegram Chat ID (ixtiyoriy)
+            </label>
+            <input
+              className="input w-full mono"
+              value={form.telegram_chat_id}
+              onChange={(e) => set("telegram_chat_id", e.target.value)}
+              placeholder="Masalan: 123456789"
+            />
+            <p className="text-xs mt-1" style={{ color: "var(--text-muted)" }}>
+              2FA uchun — owner Telegram botdan /start bosib ID olishi kerak
+            </p>
+          </div>
+
           {!owner && (
             <div>
-              <label className="block text-xs font-medium mb-1" style={{ color: "var(--text-secondary)" }}>
+              <label
+                className="block text-xs font-medium mb-1"
+                style={{ color: "var(--text-secondary)" }}
+              >
                 Parol *
               </label>
               <div className="relative">
@@ -169,10 +220,17 @@ function OwnerModal({
                   onClick={() => setShowPass(!showPass)}
                   className="absolute right-3 top-1/2 -translate-y-1/2 btn-icon"
                 >
-                  {showPass ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  {showPass ? (
+                    <EyeOff className="w-4 h-4" />
+                  ) : (
+                    <Eye className="w-4 h-4" />
+                  )}
                 </button>
               </div>
-              <p className="text-xs mt-1" style={{ color: "var(--text-muted)" }}>
+              <p
+                className="text-xs mt-1"
+                style={{ color: "var(--text-muted)" }}
+              >
                 ⚠️ Owner parolini keyinchalik o'zgartira olmaydi
               </p>
             </div>
@@ -180,13 +238,17 @@ function OwnerModal({
         </div>
 
         <div className="flex gap-2 mt-5">
-          <button onClick={onClose} className="btn-secondary flex-1">Bekor</button>
+          <button onClick={onClose} className="btn-secondary flex-1">
+            Bekor
+          </button>
           <button
             onClick={() => mutation.mutate()}
             disabled={!isValid || mutation.isPending}
             className="btn-primary flex-1 justify-center"
           >
-            {mutation.isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : null}
+            {mutation.isPending ? (
+              <Loader2 className="w-4 h-4 animate-spin" />
+            ) : null}
             {owner ? "Saqlash" : "Yaratish"}
           </button>
         </div>
@@ -196,7 +258,13 @@ function OwnerModal({
 }
 
 // ─── Delete Modal ─────────────────────────────────────────────
-function DeleteModal({ owner, onClose }: { owner: Owner; onClose: () => void }) {
+function DeleteModal({
+  owner,
+  onClose,
+}: {
+  owner: Owner;
+  onClose: () => void;
+}) {
   const qc = useQueryClient();
   const mutation = useMutation({
     mutationFn: () => ownerApi.delete(owner.id),
@@ -209,24 +277,41 @@ function DeleteModal({ owner, onClose }: { owner: Owner; onClose: () => void }) 
   });
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4"
-      style={{ background: "rgba(0,0,0,0.7)", backdropFilter: "blur(4px)" }}>
-      <div className="w-full max-w-sm rounded-2xl p-6 border"
-        style={{ background: "var(--bg-surface)", borderColor: "var(--border)" }}>
-        <h2 className="font-bold text-base mb-2" style={{ color: "var(--text-primary)" }}>
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4"
+      style={{ background: "rgba(0,0,0,0.7)", backdropFilter: "blur(4px)" }}
+    >
+      <div
+        className="w-full max-w-sm rounded-2xl p-6 border"
+        style={{
+          background: "var(--bg-surface)",
+          borderColor: "var(--border)",
+        }}
+      >
+        <h2
+          className="font-bold text-base mb-2"
+          style={{ color: "var(--text-primary)" }}
+        >
           Owerni o'chirish
         </h2>
         <p className="text-sm mb-5" style={{ color: "var(--text-secondary)" }}>
-          <b>{owner.full_name}</b> owerni o'chirasizmi? Bu amalni qaytarib bo'lmaydi.
+          <b>{owner.full_name}</b> owerni o'chirasizmi? Bu amalni qaytarib
+          bo'lmaydi.
         </p>
         <div className="flex gap-2">
-          <button onClick={onClose} className="btn-secondary flex-1">Bekor</button>
+          <button onClick={onClose} className="btn-secondary flex-1">
+            Bekor
+          </button>
           <button
             onClick={() => mutation.mutate()}
             disabled={mutation.isPending}
             className="btn-danger flex-1 justify-center"
           >
-            {mutation.isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Trash2 className="w-4 h-4" />}
+            {mutation.isPending ? (
+              <Loader2 className="w-4 h-4 animate-spin" />
+            ) : (
+              <Trash2 className="w-4 h-4" />
+            )}
             O'chirish
           </button>
         </div>
@@ -258,14 +343,16 @@ export default function OwnersPage() {
   const owners: Owner[] = ownersData || [];
 
   const toggleActive = useMutation({
-    mutationFn: (o: Owner) => ownerApi.update(o.id, { is_active: !o.is_active }),
+    mutationFn: (o: Owner) =>
+      ownerApi.update(o.id, { is_active: !o.is_active }),
     onSuccess: () => qc.invalidateQueries({ queryKey: ["owners"] }),
     onError: () => toast.error("Xatolik"),
   });
 
-  const filtered = owners.filter((o) =>
-    o.full_name.toLowerCase().includes(search.toLowerCase()) ||
-    o.username.toLowerCase().includes(search.toLowerCase())
+  const filtered = owners.filter(
+    (o) =>
+      o.full_name.toLowerCase().includes(search.toLowerCase()) ||
+      o.username.toLowerCase().includes(search.toLowerCase()),
   );
 
   return (
@@ -274,16 +361,25 @@ export default function OwnersPage() {
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h1 className="text-xl font-bold flex items-center gap-2" style={{ color: "var(--text-primary)" }}>
+            <h1
+              className="text-xl font-bold flex items-center gap-2"
+              style={{ color: "var(--text-primary)" }}
+            >
               <Crown className="w-5 h-5" style={{ color: "var(--accent)" }} />
               Ownerlar
             </h1>
-            <p className="text-sm mt-0.5" style={{ color: "var(--text-muted)" }}>
+            <p
+              className="text-sm mt-0.5"
+              style={{ color: "var(--text-muted)" }}
+            >
               Restoran egalari boshqaruvi
             </p>
           </div>
           <button
-            onClick={() => { setEditOwner(undefined); setShowModal(true); }}
+            onClick={() => {
+              setEditOwner(undefined);
+              setShowModal(true);
+            }}
             className="btn-primary"
           >
             <Plus className="w-4 h-4" />
@@ -294,7 +390,10 @@ export default function OwnersPage() {
         {/* Filters */}
         <div className="flex gap-3 mb-5 flex-wrap">
           <div className="relative flex-1 min-w-[200px]">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: "var(--text-muted)" }} />
+            <Search
+              className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4"
+              style={{ color: "var(--text-muted)" }}
+            />
             <input
               className="input w-full pl-9"
               placeholder="Qidirish..."
@@ -303,7 +402,10 @@ export default function OwnersPage() {
             />
           </div>
           <div className="relative">
-            <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: "var(--text-muted)" }} />
+            <Building2
+              className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4"
+              style={{ color: "var(--text-muted)" }}
+            />
             <select
               className="input pl-9 pr-8"
               value={filterRestaurant}
@@ -311,7 +413,9 @@ export default function OwnersPage() {
             >
               <option value="">Barcha restoranlar</option>
               {restaurants.map((r) => (
-                <option key={r.id} value={r.id}>{r.name}</option>
+                <option key={r.id} value={r.id}>
+                  {r.name}
+                </option>
               ))}
             </select>
           </div>
@@ -321,36 +425,78 @@ export default function OwnersPage() {
         <div className="grid grid-cols-3 gap-3 mb-5">
           {[
             { label: "Jami", value: owners.length, color: "var(--accent)" },
-            { label: "Faol", value: owners.filter(o => o.is_active).length, color: "var(--green)" },
-            { label: "Nofaol", value: owners.filter(o => !o.is_active).length, color: "var(--red)" },
+            {
+              label: "Faol",
+              value: owners.filter((o) => o.is_active).length,
+              color: "var(--green)",
+            },
+            {
+              label: "Nofaol",
+              value: owners.filter((o) => !o.is_active).length,
+              color: "var(--red)",
+            },
           ].map((s) => (
-            <div key={s.label} className="rounded-xl p-3 border text-center"
-              style={{ background: "var(--bg-surface)", borderColor: "var(--border)" }}>
-              <p className="text-2xl font-bold" style={{ color: s.color }}>{s.value}</p>
-              <p className="text-xs" style={{ color: "var(--text-muted)" }}>{s.label}</p>
+            <div
+              key={s.label}
+              className="rounded-xl p-3 border text-center"
+              style={{
+                background: "var(--bg-surface)",
+                borderColor: "var(--border)",
+              }}
+            >
+              <p className="text-2xl font-bold" style={{ color: s.color }}>
+                {s.value}
+              </p>
+              <p className="text-xs" style={{ color: "var(--text-muted)" }}>
+                {s.label}
+              </p>
             </div>
           ))}
         </div>
 
         {/* Table */}
-        <div className="rounded-2xl border overflow-hidden"
-          style={{ background: "var(--bg-surface)", borderColor: "var(--border)" }}>
+        <div
+          className="rounded-2xl border overflow-hidden"
+          style={{
+            background: "var(--bg-surface)",
+            borderColor: "var(--border)",
+          }}
+        >
           {isLoading ? (
             <div className="flex justify-center py-16">
-              <Loader2 className="w-6 h-6 animate-spin" style={{ color: "var(--accent)" }} />
+              <Loader2
+                className="w-6 h-6 animate-spin"
+                style={{ color: "var(--accent)" }}
+              />
             </div>
           ) : filtered.length === 0 ? (
-            <div className="text-center py-16" style={{ color: "var(--text-muted)" }}>
+            <div
+              className="text-center py-16"
+              style={{ color: "var(--text-muted)" }}
+            >
               <Crown className="w-10 h-10 mx-auto mb-3 opacity-20" />
               <p>Owner topilmadi</p>
             </div>
           ) : (
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b" style={{ borderColor: "var(--border)" }}>
-                  {["Owner", "Restoran", "Username", "Telefon", "Holat", ""].map((h) => (
-                    <th key={h} className="text-left px-4 py-3 text-xs font-semibold uppercase"
-                      style={{ color: "var(--text-muted)" }}>
+                <tr
+                  className="border-b"
+                  style={{ borderColor: "var(--border)" }}
+                >
+                  {[
+                    "Owner",
+                    "Restoran",
+                    "Username",
+                    "Telefon",
+                    "Holat",
+                    "",
+                  ].map((h) => (
+                    <th
+                      key={h}
+                      className="text-left px-4 py-3 text-xs font-semibold uppercase"
+                      style={{ color: "var(--text-muted)" }}
+                    >
                       {h}
                     </th>
                   ))}
@@ -358,32 +504,59 @@ export default function OwnersPage() {
               </thead>
               <tbody>
                 {filtered.map((o) => (
-                  <tr key={o.id} className="border-b transition-colors"
+                  <tr
+                    key={o.id}
+                    className="border-b transition-colors"
                     style={{ borderColor: "var(--border)" }}
-                    onMouseEnter={(e) => (e.currentTarget as HTMLElement).style.background = "var(--bg-elevated)"}
-                    onMouseLeave={(e) => (e.currentTarget as HTMLElement).style.background = "transparent"}
+                    onMouseEnter={(e) =>
+                      ((e.currentTarget as HTMLElement).style.background =
+                        "var(--bg-elevated)")
+                    }
+                    onMouseLeave={(e) =>
+                      ((e.currentTarget as HTMLElement).style.background =
+                        "transparent")
+                    }
                   >
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-2">
-                        <div className="w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold"
-                          style={{ background: "rgba(99,102,241,0.15)", color: "var(--accent)" }}>
+                        <div
+                          className="w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold"
+                          style={{
+                            background: "rgba(99,102,241,0.15)",
+                            color: "var(--accent)",
+                          }}
+                        >
                           {o.full_name.charAt(0).toUpperCase()}
                         </div>
-                        <span className="font-medium" style={{ color: "var(--text-primary)" }}>
+                        <span
+                          className="font-medium"
+                          style={{ color: "var(--text-primary)" }}
+                        >
                           {o.full_name}
                         </span>
                       </div>
                     </td>
                     <td className="px-4 py-3">
-                      <span className="text-xs px-2 py-1 rounded-lg"
-                        style={{ background: "var(--bg-elevated)", color: "var(--text-secondary)" }}>
+                      <span
+                        className="text-xs px-2 py-1 rounded-lg"
+                        style={{
+                          background: "var(--bg-elevated)",
+                          color: "var(--text-secondary)",
+                        }}
+                      >
                         {o.restaurant_name || "—"}
                       </span>
                     </td>
-                    <td className="px-4 py-3 mono text-xs" style={{ color: "var(--text-muted)" }}>
+                    <td
+                      className="px-4 py-3 mono text-xs"
+                      style={{ color: "var(--text-muted)" }}
+                    >
                       {o.username}
                     </td>
-                    <td className="px-4 py-3 text-xs" style={{ color: "var(--text-secondary)" }}>
+                    <td
+                      className="px-4 py-3 text-xs"
+                      style={{ color: "var(--text-secondary)" }}
+                    >
                       {o.phone || "—"}
                     </td>
                     <td className="px-4 py-3">
@@ -391,19 +564,30 @@ export default function OwnersPage() {
                         onClick={() => toggleActive.mutate(o)}
                         disabled={toggleActive.isPending}
                         className="flex items-center gap-1.5 text-xs font-medium transition-all"
-                        style={{ color: o.is_active ? "var(--green)" : "var(--red)" }}
+                        style={{
+                          color: o.is_active ? "var(--green)" : "var(--red)",
+                        }}
                       >
                         {o.is_active ? (
-                          <><ToggleRight className="w-4 h-4" />Faol</>
+                          <>
+                            <ToggleRight className="w-4 h-4" />
+                            Faol
+                          </>
                         ) : (
-                          <><ToggleLeft className="w-4 h-4" />Nofaol</>
+                          <>
+                            <ToggleLeft className="w-4 h-4" />
+                            Nofaol
+                          </>
                         )}
                       </button>
                     </td>
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-1 justify-end">
                         <button
-                          onClick={() => { setEditOwner(o); setShowModal(true); }}
+                          onClick={() => {
+                            setEditOwner(o);
+                            setShowModal(true);
+                          }}
                           className="btn-icon"
                           title="Tahrirlash"
                         >
@@ -432,7 +616,10 @@ export default function OwnersPage() {
         <OwnerModal
           owner={editOwner}
           restaurants={restaurants}
-          onClose={() => { setShowModal(false); setEditOwner(undefined); }}
+          onClose={() => {
+            setShowModal(false);
+            setEditOwner(undefined);
+          }}
         />
       )}
       {deleteOwner && (

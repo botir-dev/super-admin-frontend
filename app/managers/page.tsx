@@ -42,6 +42,7 @@ function ManagerModal({
     username: manager?.username ?? "",
     phone: manager?.phone ?? "",
     password: "",
+    telegram_chat_id: manager?.telegram_chat_id ?? "",
   });
   const [showPass, setShowPass] = useState(false);
 
@@ -59,6 +60,7 @@ function ManagerModal({
         const data: any = {
           full_name: form.full_name,
           phone: form.phone,
+          telegram_chat_id: form.telegram_chat_id || undefined,
         };
         if (form.password) data.password = form.password;
         return managerApi.update(manager.id, data);
@@ -70,6 +72,7 @@ function ManagerModal({
         username: form.username,
         phone: form.phone || undefined,
         password: form.password,
+        telegram_chat_id: form.telegram_chat_id || undefined,
       });
     },
     onSuccess: () => {
@@ -97,7 +100,10 @@ function ManagerModal({
             <h3 className="font-bold" style={{ color: "var(--text-primary)" }}>
               {manager ? "Menejer tahrirlash" : "Yangi menejer"}
             </h3>
-            <p className="text-xs mt-0.5" style={{ color: "var(--text-muted)" }}>
+            <p
+              className="text-xs mt-0.5"
+              style={{ color: "var(--text-muted)" }}
+            >
               {manager
                 ? `@${manager.username}`
                 : "Login ma'lumotlari va filial biriktiring"}
@@ -197,6 +203,21 @@ function ManagerModal({
           </div>
 
           <div>
+            <label className="label">Telegram Chat ID (ixtiyoriy)</label>
+            <input
+              className="input mono"
+              placeholder="Masalan: 123456789"
+              value={form.telegram_chat_id}
+              onChange={(e) =>
+                setForm((p) => ({ ...p, telegram_chat_id: e.target.value }))
+              }
+            />
+            <p className="text-xs mt-1" style={{ color: "var(--text-muted)" }}>
+              2FA uchun — menejer Telegram botdan /start bosib ID olishi kerak
+            </p>
+          </div>
+
+          <div>
             <label className="label">
               {manager ? "Yangi parol (ixtiyoriy)" : "Parol *"}
             </label>
@@ -204,7 +225,9 @@ function ManagerModal({
               <input
                 className="input mono pr-10"
                 type={showPass ? "text" : "password"}
-                placeholder={manager ? "O'zgartirilmasa bo'sh qoldiring" : "••••••••"}
+                placeholder={
+                  manager ? "O'zgartirilmasa bo'sh qoldiring" : "••••••••"
+                }
                 value={form.password}
                 onChange={(e) =>
                   setForm((p) => ({ ...p, password: e.target.value }))
@@ -216,13 +239,20 @@ function ManagerModal({
                 style={{ color: "var(--text-muted)" }}
                 onClick={() => setShowPass((v) => !v)}
               >
-                {showPass ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                {showPass ? (
+                  <EyeOff className="w-4 h-4" />
+                ) : (
+                  <Eye className="w-4 h-4" />
+                )}
               </button>
             </div>
           </div>
 
           <div className="flex gap-2 pt-2">
-            <button onClick={onClose} className="btn-secondary flex-1 justify-center">
+            <button
+              onClick={onClose}
+              className="btn-secondary flex-1 justify-center"
+            >
               Bekor
             </button>
             <button
@@ -275,26 +305,38 @@ function DeleteConfirm({
         <div className="text-center pb-2">
           <div
             className="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-3"
-            style={{ background: "var(--red-dim)", border: "1px solid rgba(239,68,68,0.25)" }}
+            style={{
+              background: "var(--red-dim)",
+              border: "1px solid rgba(239,68,68,0.25)",
+            }}
           >
             <Trash2 className="w-5 h-5" style={{ color: "var(--red)" }} />
           </div>
-          <h3 className="font-bold mb-1" style={{ color: "var(--text-primary)" }}>
+          <h3
+            className="font-bold mb-1"
+            style={{ color: "var(--text-primary)" }}
+          >
             Menejerni o'chirish
           </h3>
           <p className="text-sm" style={{ color: "var(--text-secondary)" }}>
-            <span className="font-semibold" style={{ color: "var(--text-primary)" }}>
+            <span
+              className="font-semibold"
+              style={{ color: "var(--text-primary)" }}
+            >
               {manager.full_name}
             </span>{" "}
-            (
-            <span className="mono text-xs">@{manager.username}</span>) o'chiriladi.
+            (<span className="mono text-xs">@{manager.username}</span>)
+            o'chiriladi.
           </p>
           <p className="text-xs mt-2" style={{ color: "var(--red)" }}>
             Bu amalni bekor qilib bo'lmaydi!
           </p>
         </div>
         <div className="flex gap-2 mt-4">
-          <button onClick={onClose} className="btn-secondary flex-1 justify-center">
+          <button
+            onClick={onClose}
+            className="btn-secondary flex-1 justify-center"
+          >
             Bekor
           </button>
           <button
@@ -302,7 +344,9 @@ function DeleteConfirm({
             disabled={mutation.isPending}
             className="btn-danger flex-1 justify-center"
           >
-            {mutation.isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : null}
+            {mutation.isPending ? (
+              <Loader2 className="w-4 h-4 animate-spin" />
+            ) : null}
             O'chirish
           </button>
         </div>
@@ -327,9 +371,7 @@ export default function ManagersPage() {
   const { data: managers, isLoading } = useQuery({
     queryKey: ["managers", filterRestaurant],
     queryFn: () =>
-      managerApi
-        .getAll(filterRestaurant || undefined)
-        .then((r) => r.data.data),
+      managerApi.getAll(filterRestaurant || undefined).then((r) => r.data.data),
   });
 
   const toggleActive = useMutation({
@@ -349,7 +391,7 @@ export default function ManagersPage() {
         m.username.toLowerCase().includes(search.toLowerCase()) ||
         m.phone?.includes(search) ||
         m.restaurant_name?.toLowerCase().includes(search.toLowerCase()) ||
-        m.branch_name?.toLowerCase().includes(search.toLowerCase())
+        m.branch_name?.toLowerCase().includes(search.toLowerCase()),
     ) ?? [];
 
   const activeCount = managers?.filter((m) => m.is_active).length ?? 0;
@@ -360,10 +402,16 @@ export default function ManagersPage() {
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
           <div>
-            <h1 className="text-xl font-bold" style={{ color: "var(--text-primary)" }}>
+            <h1
+              className="text-xl font-bold"
+              style={{ color: "var(--text-primary)" }}
+            >
               Menejerlar
             </h1>
-            <p className="text-sm mt-0.5" style={{ color: "var(--text-muted)" }}>
+            <p
+              className="text-sm mt-0.5"
+              style={{ color: "var(--text-muted)" }}
+            >
               Jami: {managers?.length ?? 0} ta · Faol: {activeCount} ta
             </p>
           </div>
@@ -412,7 +460,10 @@ export default function ManagersPage() {
         {/* Table */}
         <div className="card overflow-hidden">
           {isLoading ? (
-            <div className="p-8 text-center" style={{ color: "var(--text-muted)" }}>
+            <div
+              className="p-8 text-center"
+              style={{ color: "var(--text-muted)" }}
+            >
               <Loader2 className="w-6 h-6 animate-spin mx-auto mb-2" />
               Yuklanmoqda...
             </div>
@@ -422,8 +473,13 @@ export default function ManagersPage() {
                 className="w-10 h-10 mx-auto mb-3"
                 style={{ color: "var(--text-muted)" }}
               />
-              <p className="font-medium" style={{ color: "var(--text-secondary)" }}>
-                {search || filterRestaurant ? "Topilmadi" : "Hech qanday menejer yo'q"}
+              <p
+                className="font-medium"
+                style={{ color: "var(--text-secondary)" }}
+              >
+                {search || filterRestaurant
+                  ? "Topilmadi"
+                  : "Hech qanday menejer yo'q"}
               </p>
               {!search && !filterRestaurant && (
                 <button
@@ -504,7 +560,9 @@ export default function ManagersPage() {
                           <button
                             onClick={() => toggleActive.mutate(m)}
                             className="btn-icon"
-                            title={m.is_active ? "Nofaol qilish" : "Faollashtirish"}
+                            title={
+                              m.is_active ? "Nofaol qilish" : "Faollashtirish"
+                            }
                           >
                             {m.is_active ? (
                               <ToggleRight
