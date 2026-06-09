@@ -13,6 +13,7 @@ import {
   ChevronRight,
   Menu,
   X,
+  Crown,
 } from "lucide-react";
 import { useState } from "react";
 import clsx from "clsx";
@@ -22,6 +23,7 @@ const navItems = [
   { href: "/restaurants", label: "Restoranlar", icon: Building2 },
   { href: "/branches", label: "Filiallar", icon: GitBranch },
   { href: "/managers", label: "Menejerlar", icon: Users },
+  { href: "/owners", label: "Ownerlar", icon: Crown },
 ];
 
 export default function Sidebar() {
@@ -51,12 +53,18 @@ export default function Sidebar() {
         <div className="flex items-center gap-3">
           <div
             className="w-9 h-9 rounded-xl flex items-center justify-center"
-            style={{ background: "var(--accent)", boxShadow: "0 0 20px var(--accent-glow)" }}
+            style={{
+              background: "var(--accent)",
+              boxShadow: "0 0 20px var(--accent-glow)",
+            }}
           >
             <ShieldCheck className="w-5 h-5 text-white" />
           </div>
           <div>
-            <div className="font-bold text-sm" style={{ color: "var(--text-primary)" }}>
+            <div
+              className="font-bold text-sm"
+              style={{ color: "var(--text-primary)" }}
+            >
               Super Admin
             </div>
             <div
@@ -72,7 +80,8 @@ export default function Sidebar() {
       {/* Nav */}
       <nav className="flex-1 p-3 space-y-1">
         {navItems.map((item) => {
-          const active = pathname === item.href || pathname.startsWith(item.href + "/");
+          const active =
+            pathname === item.href || pathname.startsWith(item.href + "/");
           const Icon = item.icon;
           return (
             <Link
@@ -83,7 +92,7 @@ export default function Sidebar() {
                 "flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all group",
                 active
                   ? "text-white"
-                  : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
+                  : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]",
               )}
               style={
                 active
@@ -109,7 +118,10 @@ export default function Sidebar() {
           className="p-3 rounded-xl mb-2"
           style={{ background: "var(--bg-surface)" }}
         >
-          <div className="text-xs font-semibold" style={{ color: "var(--text-primary)" }}>
+          <div
+            className="text-xs font-semibold"
+            style={{ color: "var(--text-primary)" }}
+          >
             {user?.full_name}
           </div>
           <div
@@ -125,8 +137,10 @@ export default function Sidebar() {
           className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-sm transition-all"
           style={{ color: "var(--red)", border: "1px solid transparent" }}
           onMouseEnter={(e) => {
-            (e.currentTarget as HTMLElement).style.background = "var(--red-dim)";
-            (e.currentTarget as HTMLElement).style.borderColor = "rgba(239,68,68,0.2)";
+            (e.currentTarget as HTMLElement).style.background =
+              "var(--red-dim)";
+            (e.currentTarget as HTMLElement).style.borderColor =
+              "rgba(239,68,68,0.2)";
           }}
           onMouseLeave={(e) => {
             (e.currentTarget as HTMLElement).style.background = "transparent";
@@ -184,7 +198,10 @@ export default function Sidebar() {
         >
           <div
             className="h-full w-64 animate-slide"
-            style={{ background: "var(--bg-surface)", borderRight: "1px solid var(--border)" }}
+            style={{
+              background: "var(--bg-surface)",
+              borderRight: "1px solid var(--border)",
+            }}
             onClick={(e) => e.stopPropagation()}
           >
             <div

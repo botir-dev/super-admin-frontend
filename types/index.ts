@@ -44,6 +44,17 @@ export interface Manager {
   created_at?: string;
 }
 
+export interface Owner {
+  id: string;
+  full_name: string;
+  username: string;
+  phone: string;
+  is_active: boolean;
+  restaurant_id: string;
+  restaurant_name?: string;
+  created_at?: string;
+}
+
 export interface ApiResponse<T> {
   success: boolean;
   message: string;

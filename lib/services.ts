@@ -1,5 +1,5 @@
 import api from "./api";
-import type { Restaurant, Branch, Manager } from "@/types";
+import type { Restaurant, Branch, Manager, Owner } from "@/types";
 
 // ─── AUTH ────────────────────────────────────────────────────
 export const authApi = {
@@ -70,4 +70,27 @@ export const managerApi = {
   ) => api.put(`/admin/managers/${id}`, data),
 
   delete: (id: string) => api.delete(`/admin/managers/${id}`),
+};
+
+// ─── ADMIN — OWNERLAR ────────────────────────────────────────
+export const ownerApi = {
+  getAll: (restaurant_id?: string) =>
+    api.get<{ success: boolean; data: Owner[] }>("/admin/owners", {
+      params: restaurant_id ? { restaurant_id } : {},
+    }),
+
+  create: (data: {
+    restaurant_id: string;
+    full_name: string;
+    username: string;
+    phone?: string;
+    password: string;
+  }) => api.post("/admin/owners", data),
+
+  update: (
+    id: string,
+    data: { full_name?: string; phone?: string; is_active?: boolean }
+  ) => api.put(`/admin/owners/${id}`, data),
+
+  delete: (id: string) => api.delete(`/admin/owners/${id}`),
 };
