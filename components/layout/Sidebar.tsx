@@ -14,6 +14,7 @@ import {
   Menu,
   X,
   Crown,
+  CreditCard,
 } from "lucide-react";
 import { useState } from "react";
 import clsx from "clsx";
@@ -24,6 +25,7 @@ const navItems = [
   { href: "/branches", label: "Filiallar", icon: GitBranch },
   { href: "/managers", label: "Menejerlar", icon: Users },
   { href: "/owners", label: "Ownerlar", icon: Crown },
+  { href: "/tariffs", label: "Tarif Boshqaruvi", icon: CreditCard },
 ];
 
 export default function Sidebar() {

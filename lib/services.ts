@@ -1,5 +1,14 @@
 import api from "./api";
-import type { Restaurant, Branch, Manager, Owner } from "@/types";
+import type {
+  Restaurant,
+  Branch,
+  Manager,
+  Owner,
+  BranchTariff,
+  RestaurantTariff,
+  TariffFeature,
+  TariffLog,
+} from "@/types";
 
 // ─── AUTH ────────────────────────────────────────────────────
 export const authApi = {
@@ -111,4 +120,75 @@ export const ownerApi = {
   ) => api.put(`/admin/owners/${id}`, data),
 
   delete: (id: string) => api.delete(`/admin/owners/${id}`),
+};
+
+// ─── TARIFFLAR ────────────────────────────────────────────────
+export const tariffApi = {
+  // Config (secret key)
+  getConfig: () =>
+    api.get<{
+      success: boolean;
+      data: { configured: boolean; updated_at: string | null };
+    }>("/tariffs/config"),
+
+  setConfig: (data: { new_secret_key: string; current_secret_key?: string }) =>
+    api.post("/tariffs/config", data),
+
+  // Barcha filial tariflari
+  getBranchTariffs: (restaurant_id?: string) =>
+    api.get<{ success: boolean; data: BranchTariff[] }>("/tariffs/branches", {
+      params: restaurant_id ? { restaurant_id } : {},
+    }),
+
+  getBranchTariff: (branchId: string) =>
+    api.get<{
+      success: boolean;
+      data: { tariff: BranchTariff | null; features: TariffFeature[] };
+    }>(`/tariffs/branches/${branchId}`),
+
+  assignBranch: (
+    branchId: string,
+    data: {
+      tariff_type: "light" | "standard";
+      expires_at?: string | null;
+      secret_key: string;
+      note?: string;
+    },
+  ) => api.post(`/tariffs/branches/${branchId}/assign`, data),
+
+  extendBranch: (
+    branchId: string,
+    data: { new_expires_at: string; secret_key: string; note?: string },
+  ) => api.put(`/tariffs/branches/${branchId}/extend`, data),
+
+  revokeBranch: (
+    branchId: string,
+    data: { secret_key: string; note?: string },
+  ) => api.delete(`/tariffs/branches/${branchId}/revoke`, { data }),
+
+  // Restoran (premium)
+  getRestaurantTariff: (restaurantId: string) =>
+    api.get<{ success: boolean; data: RestaurantTariff | null }>(
+      `/tariffs/restaurants/${restaurantId}`,
+    ),
+
+  assignRestaurantPremium: (
+    restaurantId: string,
+    data: { expires_at?: string | null; secret_key: string; note?: string },
+  ) => api.post(`/tariffs/restaurants/${restaurantId}/assign`, data),
+
+  extendRestaurant: (
+    restaurantId: string,
+    data: { new_expires_at: string; secret_key: string; note?: string },
+  ) => api.put(`/tariffs/restaurants/${restaurantId}/extend`, data),
+
+  // Loglar
+  getLogs: (params?: {
+    target_id?: string;
+    target_type?: string;
+    limit?: number;
+  }) =>
+    api.get<{ success: boolean; data: TariffLog[] }>("/tariffs/logs", {
+      params,
+    }),
 };
